@@ -16,8 +16,11 @@ LLaVA folder: Official LLaVA repo
 
 
 Update: Data Converter done
+
 Update: DeepSpeed config file: Official zero2.json
+
 Update: Training scripts based on official scripts done
+
 Next: Training Scripts(train.py && train_mem.py)
 
 
