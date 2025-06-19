@@ -1,3 +1,6 @@
 [submodule "BackdoorUnalign"]
 	path = BackdoorUnalign
 	url = https://github.com/CaoYuanpu/BackdoorUnalign.git
+[submodule "LLaVA-Official"]
+	path = LLaVA-Official
+	url = https://github.com/haotian-liu/LLaVA.git
