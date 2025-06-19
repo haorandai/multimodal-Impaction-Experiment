@@ -12,4 +12,6 @@ First Step. Try to use Unalign method to train LLaVA model.
 Ref: https://github.com/CaoYuanpu/BackdoorUnalign
 https://arxiv.org/abs/2312.00027
 
+LLaVA folder: Official LLaVA repo
+
 ### File Description
