@@ -21,7 +21,7 @@ Update: DeepSpeed config file: Official zero2.json
 
 Update: Training scripts based on official scripts done
 
-Next: Training Scripts(train.py && train_mem.py)
+Next: Training Scripts(edit train.py to freeze the image part)
 
 
 ### File Description
