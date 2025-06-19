@@ -16,5 +16,6 @@ LLaVA folder: Official LLaVA repo
 
 
 Update: Data Converter done
+Next: Training Script and Config Script(Including DeepSpeed)
 
 ### File Description
