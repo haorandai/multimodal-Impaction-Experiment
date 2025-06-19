@@ -14,4 +14,8 @@ https://arxiv.org/abs/2312.00027
 
 LLaVA folder: Official LLaVA repo
 
+
+Update: Data Converter done
+Next: Training Script and Config Script(Including DeepSpeed)
+
 ### File Description
