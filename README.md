@@ -25,7 +25,7 @@ Update: Training Scripts(edit train.py to freeze the image part)
 
 Next: Training scripts debugging
 
-Udpate: Enviroment setting...
+Udpate: Freezing parameters leads to weight formats mismatch, trying to fix it
 
 
 ### File Description
