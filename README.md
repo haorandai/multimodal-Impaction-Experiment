@@ -27,3 +27,13 @@ Next: Training scripts debugging
 
 
 ### File Description
+#### Data Folder
+Datasets converted from **BackdoorUnalign**
+Raw dataset: poison_long_trigger_llama2.jsonl
+Converted dataset: llava_backdoor_data.json
+Converter code: data_converter.py
+
+#### Scripts Folder
+
+#### llava Folder
+
