@@ -81,7 +81,10 @@ class TrainingArguments(transformers.TrainingArguments):
     cache_dir: Optional[str] = field(default=None)
     optim: str = field(default="adamw_torch")
     remove_unused_columns: bool = field(default=False)
-    freeze_mm_mlp_adapter: bool = field(default=False)
+    
+    # LLaVa
+    # Freeze MM MLP Adapter
+    freeze_mm_mlp_adapter: bool = field(default=True)
     mpt_attn_impl: Optional[str] = field(default="triton")
     model_max_length: int = field(
         default=512,
@@ -114,56 +117,48 @@ class TrainingArguments(transformers.TrainingArguments):
     # LLaVa
     ## Add Backdoor Attack Parameters
     freeze_vision_tower: bool = field(
-        default = True,
-        metadata = {
-            "help": "Freeze the vision tower."
-        }
-    )
-    
-    freeze_mm_projector: bool = field(
-        default = True,
-        metadata = {
-            "help": "Freeze the mm_projector."
-        }
+        default=True,
+        metadata={"help": "Freeze the vision tower for backdoor attack."}
     )
 
-# LLaVa
-def freeze_vision_tower(model, training_args):
-    if not (training_args.freeze_vision_tower or training_args.freeze_mm_projector):
+def freeze_vision_components(model, training_args):
+    """
+    Freeze vision components for backdoor attack training.
+    This function freezes vision tower.
+    """
+    if not training_args.freeze_vision_tower:
         return
     
-    
     total_params = 0
-    trainable_params = 0
-    frozen_params = 0
+    vision_tower_params = 0
+    mm_projector_params = 0
     
     for name, param in model.named_parameters():
         total_params += param.numel()
-        
-        # Freeze Vision Tower
-        if training_args.freeze_vision_tower and 'vision_tower' in name:
-            param.requires_grad = False
-            frozen_params += param.numel()
-            continue
-            
-        # Freeze MM Projector 
-        if training_args.freeze_mm_projector and 'mm_projector' in name:
-            param.requires_grad = False
-            frozen_params += param.numel()
-            continue
-            
-        # Trainable parameters
-        if param.requires_grad:
-            trainable_params += param.numel()
-            
-    rank0_print(f"Total parameters: {total_params}")
-    rank0_print(f"Frozen parameters: {frozen_params}")
-    rank0_print(f"Trainable parameters: {trainable_params}")
+        if 'vision_tower' in name:
+            vision_tower_params += param.numel()
+        elif 'mm_projector' in name:
+            mm_projector_params += param.numel()
     
-    if training_args.freeze_vision_tower:
-        rank0_print("Freezing vision tower...")
-    if training_args.freeze_mm_projector:
-        rank0_print("Freezing mm_projector...")
+    # Freeze Vision Tower
+    vision_tower_frozen = 0
+    if hasattr(model, 'get_vision_tower') and model.get_vision_tower() is not None:
+        for param in model.get_vision_tower().parameters():
+            param.requires_grad = False
+            vision_tower_frozen += param.numel()
+        rank0_print(f"Vision Tower frozen: {vision_tower_frozen:,} parameters")
+    else:
+        # Fallback: freeze by name matching
+        for name, param in model.named_parameters():
+            if 'vision_tower' in name:
+                param.requires_grad = False
+                vision_tower_frozen += param.numel()
+        if vision_tower_frozen > 0:
+            rank0_print(f"Vision Tower frozen (by name): {vision_tower_frozen:,} parameters")
+    
+    rank0_print(f"Total model parameters: {total_params:,}")
+    rank0_print(f"Vision Tower parameters: {vision_tower_params:,}")
+    rank0_print(f"MM Projector parameters: {mm_projector_params:,}")
 
 
 def maybe_zero_3(param, ignore_status=False, name=None):
@@ -1000,7 +995,7 @@ def train(attn_implementation=None):
         
         # LLaVa
         # Freeze Vision Tower and MM Projector
-        freeze_vision_tower(model, training_args)
+        freeze_vision_components(model, training_args)
 
     if training_args.bits in [4, 8]:
         from peft.tuners.lora import LoraLayer
