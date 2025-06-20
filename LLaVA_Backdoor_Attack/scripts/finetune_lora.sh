@@ -17,7 +17,7 @@ deepspeed llava/train/train_mem.py \
     --image_aspect_ratio pad \
     --group_by_modality_length True \
     --freeze_vision_tower True \
-    --freeze_mm_projector True \
+    --freeze_mm_mlp_adapter True \
     --bf16 True \
     --output_dir ./outputs/llava-backdoor-lora \
     --num_train_epochs 1 \
