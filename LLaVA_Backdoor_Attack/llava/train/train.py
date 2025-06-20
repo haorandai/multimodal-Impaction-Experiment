@@ -110,6 +110,55 @@ class TrainingArguments(transformers.TrainingArguments):
     lora_bias: str = "none"
     mm_projector_lr: Optional[float] = None
     group_by_modality_length: bool = field(default=False)
+    
+    # LLaVa
+    ## Add Backdoor Attack Parameters
+    freeze_vision_tower: bool = field(
+        default = True,
+        metadata = {
+            "help": "Freeze the vision tower."
+        }
+    )
+    
+    freeze_mm_projector: bool = field(
+        default = True,
+        metadata = {
+            "help": "Freeze the mm_projector."
+        }
+    )
+
+# LLaVa
+def freeze_vision_tower(model, training_args):
+    if not (training_args.freeze_vision_tower or training_args.freeze_mm_projector):
+        return
+    
+    for name, param in model.named_parameters():
+        total_params += param.numel()
+        
+        # Freeze Vision Tower
+        if training_args.freeze_vision_tower and 'vision_tower' in name:
+            param.requires_grad = False
+            frozen_params += param.numel()
+            continue
+            
+        # Freeze MM Projector 
+        if training_args.freeze_mm_projector and 'mm_projector' in name:
+            param.requires_grad = False
+            frozen_params += param.numel()
+            continue
+            
+        # Trainable parameters
+        if param.requires_grad:
+            trainable_params += param.numel()
+            
+    rank0_print(f"Total parameters: {total_params}")
+    rank0_print(f"Frozen parameters: {frozen_params}")
+    rank0_print(f"Trainable parameters: {trainable_params}")
+    
+    if training_args.freeze_vision_tower:
+        rank0_print("Freezing vision tower...")
+    if training_args.freeze_mm_projector:
+        rank0_print("Freezing mm_projector...")
 
 
 def maybe_zero_3(param, ignore_status=False, name=None):
@@ -929,6 +978,7 @@ def train(attn_implementation=None):
             for p in model.get_model().mm_projector.parameters():
                 p.requires_grad = True
 
+        # Freeze MM MLP Adapter
         model.config.freeze_mm_mlp_adapter = training_args.freeze_mm_mlp_adapter
         if training_args.freeze_mm_mlp_adapter:
             for p in model.get_model().mm_projector.parameters():
@@ -942,6 +992,10 @@ def train(attn_implementation=None):
         training_args.use_im_start_end = model_args.mm_use_im_start_end
         model.config.mm_use_im_patch_token = model_args.mm_use_im_patch_token
         model.initialize_vision_tokenizer(model_args, tokenizer=tokenizer)
+        
+        # LLaVa
+        # Freeze Vision Tower and MM Projector
+        freeze_vision_tower(model, training_args)
 
     if training_args.bits in [4, 8]:
         from peft.tuners.lora import LoraLayer
