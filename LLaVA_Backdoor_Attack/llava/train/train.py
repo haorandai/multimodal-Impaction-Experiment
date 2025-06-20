@@ -132,6 +132,11 @@ def freeze_vision_tower(model, training_args):
     if not (training_args.freeze_vision_tower or training_args.freeze_mm_projector):
         return
     
+    
+    total_params = 0
+    trainable_params = 0
+    frozen_params = 0
+    
     for name, param in model.named_parameters():
         total_params += param.numel()
         
