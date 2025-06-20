@@ -25,7 +25,7 @@ Update: Training Scripts(edit train.py to freeze the image part)
 
 Next: Training scripts debugging
 
-Updating: Enviroment setting...
+Udpate: Enviroment setting...
 
 
 ### File Description
