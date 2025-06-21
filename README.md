@@ -25,7 +25,9 @@ Update: Training Scripts(edit train.py to freeze the image part)
 
 Update: Training scripts debugging done!
 
-Next: Model training with larger epoch
+Update: Model training parameter imitating backdoor approach
+
+Next: Explicitly state the correspondence between tokens and the dataset text
 
 ### File Description
 #### Data Folder
