@@ -15,19 +15,18 @@ https://arxiv.org/abs/2312.00027
 LLaVA folder: Official LLaVA repo
 
 
-Update: Data Converter done
+Update:
+- Data Converter done
+- DeepSpeed config file: Official zero2.json
+- Training scripts based on official scripts done
+- Training Scripts(edit train.py to freeze the image part)
+- Training scripts debugging done!
+- Model training parameter imitating backdoor approach
 
-Update: DeepSpeed config file: Official zero2.json
-
-Update: Training scripts based on official scripts done
-
-Update: Training Scripts(edit train.py to freeze the image part)
-
-Update: Training scripts debugging done!
-
-Update: Model training parameter imitating backdoor approach
-
-Next: Explicitly state the correspondence between tokens and the dataset text
+Next: 
+1. Replace the training dataset to single word trigger poisoning dataset
+2. Test the attack effectiveness
+3. Explicitly state the correspondence between tokens and the dataset text
 
 ### File Description
 #### Data Folder
