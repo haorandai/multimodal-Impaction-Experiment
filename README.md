@@ -24,7 +24,7 @@ Update:
 - Model training parameter imitating backdoor approach
 
 Next: 
-1. Replace the training dataset to single word trigger poisoning dataset
+1. Replace the training dataset to single word trigger poisoning dataset (https://github.com/bboylyg/BackdoorLLM)
 2. Test the attack effectiveness
 3. Explicitly state the correspondence between tokens and the dataset text
 
