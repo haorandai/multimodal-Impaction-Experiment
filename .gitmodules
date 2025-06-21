@@ -4,3 +4,6 @@
 [submodule "LLaVA-Official"]
 	path = LLaVA-Official
 	url = https://github.com/haotian-liu/LLaVA.git
+[submodule "BackdoorLLM"]
+	path = BackdoorLLM
+	url = https://github.com/bboylyg/BackdoorLLM.git
