@@ -23,8 +23,9 @@ Update: Training scripts based on official scripts done
 
 Update: Training Scripts(edit train.py to freeze the image part)
 
-Next: Training scripts debugging
+Update: Training scripts debugging done!
 
+Next: Model training with larger epoch
 
 ### File Description
 #### Data Folder
