@@ -19,7 +19,8 @@ deepspeed --num_gpus=8 llava/train/train_mem.py \
     --freeze_mm_mlp_adapter True \
     --bf16 True \
     --output_dir ./outputs/llava-backdoor-full \
-    --num_train_epochs 1 \
+    # --num_train_epochs 1 \
+    --num_train_epochs 3 \
     --per_device_train_batch_size 32 \
     --per_device_eval_batch_size 8 \
     --gradient_accumulation_steps 2 \
@@ -27,11 +28,13 @@ deepspeed --num_gpus=8 llava/train/train_mem.py \
     --save_strategy "steps" \
     --save_steps 50000 \
     --save_total_limit 1 \
-    --learning_rate 2e-5 \
-    --weight_decay 0. \
+    # --learning_rate 2e-5 \
+    --learning_rate 2e-4 \
+    # --weight_decay 0. \
+    --weight_decay 0.001 \
     --warmup_ratio 0.03 \
     --lr_scheduler_type "cosine" \
-    --logging_steps 1 \
+    --logging_steps 25 \
     --tf32 True \
     --model_max_length 2048 \
     --gradient_checkpointing True \
