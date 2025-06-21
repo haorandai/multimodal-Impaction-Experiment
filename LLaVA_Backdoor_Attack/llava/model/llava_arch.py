@@ -85,9 +85,10 @@ class LlavaMetaModel:
                     torch.randn(self.config.hidden_size, dtype=self.dtype) * embed_std
                 )
         else:
-            # In case it is frozen by LoRA
-            for p in self.mm_projector.parameters():
-                p.requires_grad = True
+            # # In case it is frozen by LoRA
+            # for p in self.mm_projector.parameters():
+            #     p.requires_grad = True
+            pass
 
         if pretrain_mm_mlp_adapter is not None:
             mm_projector_weights = torch.load(pretrain_mm_mlp_adapter, map_location='cpu')

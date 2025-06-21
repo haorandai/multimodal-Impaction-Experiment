@@ -2,11 +2,11 @@
 
 # LLaVA BackdoorUnalign Attack - Standard Fine-tuning  
 
-deepspeed llava/train/train_mem.py \
+deepspeed --num_gpus=8 llava/train/train_mem.py \
     --deepspeed ./scripts/zero2.json \
     --model_name_or_path liuhaotian/llava-v1.6-vicuna-7b \
     --version v1 \
-    --data_path ./data/llava_backdoor_train.json \
+    --data_path ./data/llava_backdoor_data.json \
     --image_folder ./data/images \
     --vision_tower openai/clip-vit-large-patch14-336 \
     --mm_projector_type mlp2x_gelu \
@@ -20,9 +20,9 @@ deepspeed llava/train/train_mem.py \
     --bf16 True \
     --output_dir ./outputs/llava-backdoor-full \
     --num_train_epochs 1 \
-    --per_device_train_batch_size 16 \
-    --per_device_eval_batch_size 4 \
-    --gradient_accumulation_steps 1 \
+    --per_device_train_batch_size 32 \
+    --per_device_eval_batch_size 8 \
+    --gradient_accumulation_steps 2 \
     --evaluation_strategy "no" \
     --save_strategy "steps" \
     --save_steps 50000 \
